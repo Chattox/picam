@@ -1,5 +1,5 @@
 import { Image } from '@mantine/core';
 
 export const PiStream = () => {
-  return <Image src="http://192.168.178.63:8000/stream.mjpg" width="40rem" height="22.5rem" />;
+  return <Image src={process.env.REACT_APP_STREAM_URL} width="40rem" height="22.5rem" />;
 };

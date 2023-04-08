@@ -1,5 +1,14 @@
 import { Image } from '@mantine/core';
+import { useStyles } from './index.styles';
 
 export const PiStream = () => {
-  return <Image src={process.env.REACT_APP_STREAM_URL} width="40rem" height="22.5rem" />;
+  const { classes } = useStyles();
+  return (
+    <Image
+      src={process.env.REACT_APP_STREAM_URL}
+      radius="md"
+      className={classes.streamImg}
+      withPlaceholder
+    />
+  );
 };

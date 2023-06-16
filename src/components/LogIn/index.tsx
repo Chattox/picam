@@ -19,7 +19,6 @@ export const LogIn = (props: { setIsAuth: React.Dispatch<boolean> }) => {
       onSubmit={loginForm.onSubmit(
         (values) => {
           props.setIsAuth(true);
-          console.log(values);
         },
         (validatorErrors) => {
           console.log(validatorErrors);

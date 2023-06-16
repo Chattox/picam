@@ -1,17 +1,17 @@
 import axios from 'axios';
 
-const config = {
-  headers: {
-    'Content-type': 'application/json',
-    'Access-Control-Allow-Methods': 'GET',
-    'ngrok-skip-browser-warning':'any'
-  },
-  method: 'get',
-  url: process.env.REACT_APP_TEMPERATURE_URL,
-  withCredentials: false
-};
-
 export const getTemp = async () => {
+  const config = {
+    headers: {
+      'Content-type': 'application/json',
+      'Access-Control-Allow-Methods': 'GET',
+      'ngrok-skip-browser-warning': 'any',
+    },
+    method: 'get',
+    url: process.env.REACT_APP_TEMPERATURE_URL,
+    withCredentials: false,
+  };
+
   return await axios(config)
     .then((res) => {
       return {

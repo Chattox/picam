@@ -18,6 +18,7 @@ export const Temperature = () => {
   };
 
   useEffect(() => {
+    getTemperature();
     const interval = setInterval(() => getTemperature(), 10000);
     return () => {
       clearInterval(interval);

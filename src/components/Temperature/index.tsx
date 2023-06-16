@@ -1,4 +1,4 @@
-import { Text } from '@mantine/core';
+import { Text, Card } from '@mantine/core';
 import { getTemp } from '../../utils/getTemp';
 import { useEffect, useState } from 'react';
 import { formatTime } from '../../utils/formatTime';
@@ -43,7 +43,7 @@ export const Temperature = () => {
   }, []);
 
   return (
-    <>
+    <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Text>Current temperature: {temp} °C</Text>
       <Text>
         Min temp: {minTemp.temp} °C at {minTemp.time}
@@ -52,6 +52,6 @@ export const Temperature = () => {
         Max temp: {maxTemp.temp} °C at {maxTemp.time}
       </Text>
       <Text>Last polled: {timestamp}</Text>
-    </>
+    </Card>
   );
 };

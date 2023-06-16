@@ -17,7 +17,6 @@ export const Temperature = () => {
   const getTemperature = () => {
     getTemp().then((res) => {
       if (res.status === 200) {
-        console.log(res.data);
         setTemp(res.data.temp.toFixed(2));
         const minTime = new Date(res.data.minTemp.time);
         const maxTime = new Date(res.data.maxTemp.time);

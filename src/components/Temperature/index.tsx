@@ -44,14 +44,23 @@ export const Temperature = () => {
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <Text>Current temperature: {temp} °C</Text>
-      <Text>
-        Min temp: {minTemp.temp} °C at {minTemp.time}
+      <Text fw={700}>Current temperature:</Text> <Text> {temp} °C</Text>
+      <Text fw={700}>Min temp:</Text>
+      <Text span> {minTemp.temp} °C</Text>
+      <Text fz="sm" fs="italic" span>
+        {' '}
+        at
+      </Text>{' '}
+      <Text span> {minTemp.time}</Text>
+      <Text fw={700}>Max temp: </Text>
+      <Text span> {maxTemp.temp} °C</Text>{' '}
+      <Text fz="sm" fs="italic" span>
+        {' '}
+        at
       </Text>
-      <Text>
-        Max temp: {maxTemp.temp} °C at {maxTemp.time}
-      </Text>
-      <Text>Last polled: {timestamp}</Text>
+      <Text span> {maxTemp.time}</Text>
+      <Text fw={700}>Last polled: </Text>
+      <Text> {timestamp}</Text>
     </Card>
   );
 };

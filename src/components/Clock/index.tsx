@@ -1,4 +1,4 @@
-import { Text } from '@mantine/core';
+import { Card, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 export const Clock = () => {
@@ -20,5 +20,9 @@ export const Clock = () => {
     };
   }, []);
 
-  return <Text>Current time: {time}</Text>;
+  return (
+    <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Text fw={700}>Current time:</Text> <Text>{time}</Text>
+    </Card>
+  );
 };

@@ -7,8 +7,10 @@ export const Display = () => {
   return (
     <Flex direction="column" align="center" justify="center" gap="xl">
       <PiStream />
-      <Clock />
-      <Temperature />
+      <Flex direction="row" align="flex-start" justify="center" gap="xl">
+        <Clock />
+        <Temperature />
+      </Flex>
     </Flex>
   );
 };

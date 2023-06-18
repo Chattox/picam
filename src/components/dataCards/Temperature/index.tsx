@@ -1,7 +1,7 @@
 import { Text, Card } from '@mantine/core';
-import { getTemp } from '../../utils/getTemp';
+import { getTemp } from '../../../utils/getTemp';
 import { useEffect, useState } from 'react';
-import { formatTime } from '../../utils/formatTime';
+import { formatTime } from '../../../utils/formatTime';
 
 export interface Temp {
   temp: number;

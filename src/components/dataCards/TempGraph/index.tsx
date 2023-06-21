@@ -3,17 +3,35 @@ import { Line } from 'react-chartjs-2';
 import { useEffect, useState } from 'react';
 import { formatTempData } from '../../../utils/formatTempData';
 import { getTempHistory } from '../../../utils/getTempHistory';
-import { ChartData } from 'chart.js/auto';
+import { ChartData, ChartOptions } from 'chart.js/auto';
 
-interface LineProps {
-  data: ChartData<'line'>;
-}
+const config: ChartOptions<'line'> = {
+  elements: {
+    line: {
+      tension: 1,
+      borderWidth: 5,
+    },
+    point: {
+      radius: 0,
+    },
+  },
+  plugins: {
+    legend: {
+      labels: {
+        boxHeight: 3,
+        boxWidth: 3,
+      },
+    },
+  },
+};
 
 export const TempGraph = () => {
-  const [lineProps, setLineProps] = useState<LineProps>({ data: { labels: [], datasets: [] } });
+  const [lineData, setLineData] = useState<ChartData<'line'>>({ labels: [], datasets: [] });
+  const [lineOptions, setLineOptions] = useState<ChartOptions<'line'>>(config);
 
   useEffect(() => {
-    getTempHistory().then((res) => setLineProps({ data: formatTempData(res.data) }));
+    getTempHistory().then((res) => setLineData(formatTempData(res.data)));
   }, []);
-  return <Line data={lineProps.data} />;
+
+  return <Line data={lineData} options={lineOptions} />;
 };

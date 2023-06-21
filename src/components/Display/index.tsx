@@ -3,6 +3,7 @@ import { PiStream } from '../PiStream';
 import { Temperature } from '../dataCards/Temperature';
 import { Clock } from '../dataCards/Clock';
 import { useStyles } from './index.styles';
+import { TempGraph } from '../dataCards/TempGraph';
 
 export const Display = () => {
   const { classes } = useStyles();
@@ -16,6 +17,9 @@ export const Display = () => {
       </Grid.Col>
       <Grid.Col span={2}>
         <Temperature />
+      </Grid.Col>
+      <Grid.Col span={4}>
+        <TempGraph />
       </Grid.Col>
     </Grid>
   );

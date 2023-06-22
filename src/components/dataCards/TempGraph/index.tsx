@@ -1,9 +1,10 @@
 import 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import { useEffect, useState } from 'react';
+import { ChartData, ChartOptions } from 'chart.js/auto';
+import { Card } from '@mantine/core';
 import { formatTempData } from '../../../utils/formatTempData';
 import { getTempHistory } from '../../../utils/getTempHistory';
-import { ChartData, ChartOptions } from 'chart.js/auto';
 
 const config: ChartOptions<'line'> = {
   scales: {
@@ -41,5 +42,9 @@ export const TempGraph = () => {
     getTempHistory().then((res) => setLineData(formatTempData(res.data)));
   }, []);
 
-  return <Line data={lineData} options={lineOptions} />;
+  return (
+    <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <Line data={lineData} options={lineOptions} />
+    </Card>
+  );
 };

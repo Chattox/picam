@@ -1,18 +1,21 @@
-import { Text, Card } from '@mantine/core';
+import { Text, Card, ActionIcon } from '@mantine/core';
+import { IconTimeline } from '@tabler/icons-react';
 import { getTemp } from '../../../utils/getTemp';
 import { useEffect, useState } from 'react';
 import { formatTime } from '../../../utils/formatTime';
+import { useStyles } from './index.styles';
 
 export interface Temp {
   temp: number;
   time: string;
 }
 
-export const Temperature = () => {
+export const Temperature = (props: { toggleOpened: () => void }) => {
   const [temp, setTemp] = useState(999);
   const [minTemp, setMinTemp] = useState<Temp>({ temp: 999, time: '' });
   const [maxTemp, setMaxTemp] = useState<Temp>({ temp: 999, time: '' });
   const [timestamp, setTimestamp] = useState('');
+  const { classes } = useStyles();
 
   const getTemperature = () => {
     getTemp().then((res) => {
@@ -61,6 +64,15 @@ export const Temperature = () => {
       <Text span> {maxTemp.time}</Text>
       <Text fw={700}>Last polled: </Text>
       <Text> {timestamp}</Text>
+      <ActionIcon
+        color="cyan"
+        size="lg"
+        variant="outline"
+        onClick={() => props.toggleOpened()}
+        className={classes.graphButton}
+      >
+        <IconTimeline />
+      </ActionIcon>
     </Card>
   );
 };

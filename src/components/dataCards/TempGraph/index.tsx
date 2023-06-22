@@ -6,9 +6,18 @@ import { getTempHistory } from '../../../utils/getTempHistory';
 import { ChartData, ChartOptions } from 'chart.js/auto';
 
 const config: ChartOptions<'line'> = {
+  scales: {
+    x: {
+      ticks: {
+        maxTicksLimit: 6,
+        align: 'start',
+        minRotation: 45,
+      },
+    },
+  },
   elements: {
     line: {
-      tension: 1,
+      tension: 0.5,
       borderWidth: 5,
     },
     point: {
@@ -18,8 +27,7 @@ const config: ChartOptions<'line'> = {
   plugins: {
     legend: {
       labels: {
-        boxHeight: 3,
-        boxWidth: 3,
+        usePointStyle: true,
       },
     },
   },
@@ -27,7 +35,7 @@ const config: ChartOptions<'line'> = {
 
 export const TempGraph = () => {
   const [lineData, setLineData] = useState<ChartData<'line'>>({ labels: [], datasets: [] });
-  const [lineOptions, setLineOptions] = useState<ChartOptions<'line'>>(config);
+  const [lineOptions] = useState<ChartOptions<'line'>>(config);
 
   useEffect(() => {
     getTempHistory().then((res) => setLineData(formatTempData(res.data)));

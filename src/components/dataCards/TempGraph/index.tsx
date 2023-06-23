@@ -27,9 +27,11 @@ const config: ChartOptions<'line'> = {
     line: {
       tension: 0.5,
       borderWidth: 5,
+      borderColor: 'rgba(25, 100, 126, 1)',
     },
     point: {
       radius: 1,
+      borderColor: 'rgba(25, 100, 126, 1)',
     },
   },
   plugins: {
@@ -77,7 +79,7 @@ export const TempGraph = () => {
                 type: 'point',
                 xValue: formatTime(new Date(minTemp.time)),
                 yValue: parseFloat(minTemp.temp.toFixed(2)),
-                backgroundColor: 'rgba(0, 0, 255, 1)',
+                backgroundColor: 'rgba(75, 63, 114, 1)',
                 radius: 5,
                 borderWidth: 0,
               },
@@ -85,7 +87,7 @@ export const TempGraph = () => {
                 type: 'point',
                 xValue: formatTime(new Date(maxTemp.time)),
                 yValue: parseFloat(maxTemp.temp.toFixed(2)),
-                backgroundColor: 'rgba(255, 0, 0, 1)',
+                backgroundColor: 'rgba(255, 200, 87, 1)',
                 radius: 5,
                 borderWidth: 0,
               },

@@ -48,20 +48,6 @@ export const Temperature = (props: { toggleOpened: () => void }) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Text fw={700}>Current temperature:</Text> <Text> {temp} °C</Text>
-      <Text fw={700}>Min temp (in last 24hrs):</Text>
-      <Text span> {minTemp.temp} °C</Text>
-      <Text fz="sm" fs="italic" span>
-        {' '}
-        at
-      </Text>{' '}
-      <Text span> {minTemp.time}</Text>
-      <Text fw={700}>Max temp (in last 24hrs): </Text>
-      <Text span> {maxTemp.temp} °C</Text>{' '}
-      <Text fz="sm" fs="italic" span>
-        {' '}
-        at
-      </Text>
-      <Text span> {maxTemp.time}</Text>
       <Text fw={700}>Last polled: </Text>
       <Text> {timestamp}</Text>
       <ActionIcon

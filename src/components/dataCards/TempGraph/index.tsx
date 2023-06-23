@@ -12,7 +12,8 @@ const config: ChartOptions<'line'> = {
       ticks: {
         maxTicksLimit: 6,
         align: 'start',
-        minRotation: 45,
+        minRotation: 10,
+        maxRotation: 45,
       },
     },
   },
@@ -22,7 +23,7 @@ const config: ChartOptions<'line'> = {
       borderWidth: 5,
     },
     point: {
-      radius: 0,
+      radius: 1,
     },
   },
   plugins: {

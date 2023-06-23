@@ -12,8 +12,9 @@ export interface Temp {
 
 export const Temperature = (props: { toggleOpened: () => void }) => {
   const [temp, setTemp] = useState(999);
-  const [minTemp, setMinTemp] = useState<Temp>({ temp: 999, time: '' });
-  const [maxTemp, setMaxTemp] = useState<Temp>({ temp: 999, time: '' });
+  // TODO reenable this once min/max temps are fixed on the backend
+  // const [minTemp, setMinTemp] = useState<Temp>({ temp: 999, time: '' });
+  // const [maxTemp, setMaxTemp] = useState<Temp>({ temp: 999, time: '' });
   const [timestamp, setTimestamp] = useState('');
   const { classes } = useStyles();
 
@@ -21,10 +22,10 @@ export const Temperature = (props: { toggleOpened: () => void }) => {
     getTemp().then((res) => {
       if (res.status === 200) {
         setTemp(res.data.temp.toFixed(2));
-        const minTime = new Date(res.data.minTemp.time);
-        const maxTime = new Date(res.data.maxTemp.time);
-        setMinTemp({ temp: res.data.minTemp.temp.toFixed(2), time: formatTime(minTime) });
-        setMaxTemp({ temp: res.data.maxTemp.temp.toFixed(2), time: formatTime(maxTime) });
+        // const minTime = new Date(res.data.minTemp.time);
+        // const maxTime = new Date(res.data.maxTemp.time);
+        // setMinTemp({ temp: res.data.minTemp.temp.toFixed(2), time: formatTime(minTime) });
+        // setMaxTemp({ temp: res.data.maxTemp.temp.toFixed(2), time: formatTime(maxTime) });
         const time = new Date(res.data.time);
         setTimestamp(formatTime(time));
       } else {
@@ -48,20 +49,6 @@ export const Temperature = (props: { toggleOpened: () => void }) => {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Text fw={700}>Current temperature:</Text> <Text> {temp} °C</Text>
-      <Text fw={700}>Min temp (in last 24hrs):</Text>
-      <Text span> {minTemp.temp} °C</Text>
-      <Text fz="sm" fs="italic" span>
-        {' '}
-        at
-      </Text>{' '}
-      <Text span> {minTemp.time}</Text>
-      <Text fw={700}>Max temp (in last 24hrs): </Text>
-      <Text span> {maxTemp.temp} °C</Text>{' '}
-      <Text fz="sm" fs="italic" span>
-        {' '}
-        at
-      </Text>
-      <Text span> {maxTemp.time}</Text>
       <Text fw={700}>Last polled: </Text>
       <Text> {timestamp}</Text>
       <ActionIcon

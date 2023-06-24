@@ -16,6 +16,14 @@ export const formatTempData = (data: TempDataProps[]): ChartData<'line'> => {
       label: 'Temperature °C',
       data: data.map((item) => parseFloat(item.temp.toFixed(2))),
     },
+    {
+      label: 'Min Temp',
+      data: [],
+    },
+    {
+      label: 'Max Temp',
+      data: [],
+    },
   ];
 
   return { labels, datasets };

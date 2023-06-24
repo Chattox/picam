@@ -4,63 +4,68 @@ import { Chart } from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { useEffect, useState } from 'react';
 import { ChartData, ChartOptions } from 'chart.js/auto';
-import { Card } from '@mantine/core';
+import { Card, useMantineTheme } from '@mantine/core';
 import { formatTempData } from '../../../utils/formatTempData';
 import { getTempHistory } from '../../../utils/getTempHistory';
 import { getMinOrMaxTemp } from '../../../utils/getMinOrMaxTemp';
 import { formatTime } from '../../../utils/formatTime';
 
-Chart.register(annotationPlugin);
-
-const config: ChartOptions<'line'> = {
-  scales: {
-    x: {
-      ticks: {
-        maxTicksLimit: 6,
-        align: 'start',
-        minRotation: 10,
-        maxRotation: 45,
-      },
-    },
-  },
-  elements: {
-    line: {
-      tension: 0.5,
-      borderWidth: 5,
-      borderColor: 'rgba(25, 100, 126, 1)',
-    },
-    point: {
-      radius: 1,
-      borderColor: 'rgba(25, 100, 126, 1)',
-    },
-  },
-  plugins: {
-    annotation: {
-      annotations: {
-        minTemp: {
-          type: 'point',
-          xValue: undefined,
-          yValue: undefined,
-          backgroundColor: 'rgba(0, 255, 0, 0.5)',
-          radius: 3,
-          borderWidth: 0,
-          display: false,
-        },
-        maxTemp: {
-          type: 'point',
-          xValue: undefined,
-          yValue: undefined,
-          backgroundColor: 'rgba(255, 0, 0, 0.5)',
-          radius: 3,
-          borderWidth: 0,
-          display: false,
-        },
-      },
-    },
-  },
-};
-
 export const TempGraph = () => {
+  const theme = useMantineTheme();
+  Chart.register(annotationPlugin);
+
+  const config: ChartOptions<'line'> = {
+    scales: {
+      x: {
+        ticks: {
+          maxTicksLimit: 6,
+          align: 'start',
+          minRotation: 10,
+          maxRotation: 45,
+        },
+      },
+    },
+    elements: {
+      line: {
+        tension: 0.5,
+        borderWidth: 5,
+        borderColor: [
+          theme.fn.rgba(theme.colors.blue[7], 1),
+          theme.fn.rgba(theme.colors.cyan[3], 1),
+          theme.fn.rgba(theme.colors.orange[5], 1),
+        ],
+      },
+      point: {
+        radius: 1,
+        borderColor: theme.fn.rgba(theme.colors.blue[7], 1),
+      },
+    },
+    plugins: {
+      annotation: {
+        annotations: {
+          minTemp: {
+            type: 'point',
+            xValue: undefined,
+            yValue: undefined,
+            backgroundColor: 'rgba(0, 255, 0, 0.5)',
+            radius: 3,
+            borderWidth: 0,
+            display: false,
+          },
+          maxTemp: {
+            type: 'point',
+            xValue: undefined,
+            yValue: undefined,
+            backgroundColor: 'rgba(255, 0, 0, 0.5)',
+            radius: 3,
+            borderWidth: 0,
+            display: false,
+          },
+        },
+      },
+    },
+  };
+
   const [lineData, setLineData] = useState<ChartData<'line'>>({ labels: [], datasets: [] });
   const [lineOptions, setLineOptions] = useState<ChartOptions<'line'>>(config);
 
@@ -73,22 +78,25 @@ export const TempGraph = () => {
       setLineOptions({
         ...lineOptions,
         plugins: {
+          legend: {
+            labels: { boxWidth: 5, boxHeight: 5, padding: 20 },
+          },
           annotation: {
             annotations: {
               minTemp: {
                 type: 'point',
                 xValue: formatTime(new Date(minTemp.time)),
                 yValue: parseFloat(minTemp.temp.toFixed(2)),
-                backgroundColor: 'rgba(75, 63, 114, 1)',
-                radius: 5,
+                backgroundColor: theme.fn.rgba(theme.colors.cyan[3], 1),
+                radius: 8,
                 borderWidth: 0,
               },
               maxTemp: {
                 type: 'point',
                 xValue: formatTime(new Date(maxTemp.time)),
                 yValue: parseFloat(maxTemp.temp.toFixed(2)),
-                backgroundColor: 'rgba(255, 200, 87, 1)',
-                radius: 5,
+                backgroundColor: theme.fn.rgba(theme.colors.orange[5], 1),
+                radius: 8,
                 borderWidth: 0,
               },
             },
@@ -96,6 +104,7 @@ export const TempGraph = () => {
         },
       });
     });
+    //eslint-disable-next-line
   }, []);
 
   return (

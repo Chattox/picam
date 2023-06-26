@@ -18,11 +18,12 @@ export const TempGraph = () => {
     scales: {
       x: {
         ticks: {
-          maxTicksLimit: 6,
-          align: 'start',
-          minRotation: 10,
-          maxRotation: 45,
+          display: false,
+          maxTicksLimit: 4,
         },
+      },
+      y: {
+        grace: '5%',
       },
     },
     elements: {
@@ -79,11 +80,6 @@ export const TempGraph = () => {
       const maxTemp = getMinOrMaxTemp('max', res.data);
       setLineOptions({
         ...lineOptions,
-        scales: {
-          y: {
-            grace: '5%',
-          },
-        },
         plugins: {
           legend: {
             labels: { boxWidth: 5, boxHeight: 5, padding: 20 },

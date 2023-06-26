@@ -34,10 +34,12 @@ export const TempGraph = () => {
           theme.fn.rgba(theme.colors.cyan[3], 1),
           theme.fn.rgba(theme.colors.orange[5], 1),
         ],
+        backgroundColor: theme.fn.rgba(theme.colors.blue[7], 1),
       },
       point: {
         radius: 1,
         borderColor: theme.fn.rgba(theme.colors.blue[7], 1),
+        backgroundColor: theme.fn.rgba(theme.colors.blue[7], 1),
       },
     },
     plugins: {
@@ -77,6 +79,11 @@ export const TempGraph = () => {
       const maxTemp = getMinOrMaxTemp('max', res.data);
       setLineOptions({
         ...lineOptions,
+        scales: {
+          y: {
+            grace: '5%',
+          },
+        },
         plugins: {
           legend: {
             labels: { boxWidth: 5, boxHeight: 5, padding: 20 },
@@ -88,7 +95,7 @@ export const TempGraph = () => {
                 xValue: formatTime(new Date(minTemp.time)),
                 yValue: parseFloat(minTemp.temp.toFixed(2)),
                 backgroundColor: theme.fn.rgba(theme.colors.cyan[3], 1),
-                radius: 8,
+                radius: 4,
                 borderWidth: 0,
               },
               maxTemp: {
@@ -96,7 +103,7 @@ export const TempGraph = () => {
                 xValue: formatTime(new Date(maxTemp.time)),
                 yValue: parseFloat(maxTemp.temp.toFixed(2)),
                 backgroundColor: theme.fn.rgba(theme.colors.orange[5], 1),
-                radius: 8,
+                radius: 4,
                 borderWidth: 0,
               },
             },

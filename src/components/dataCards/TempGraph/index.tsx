@@ -1,10 +1,9 @@
 import 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
-import { Chart } from 'chart.js/auto';
+import { Chart, ChartData, ChartOptions } from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { useEffect, useState } from 'react';
-import { ChartData, ChartOptions } from 'chart.js/auto';
-import { Card, useMantineTheme } from '@mantine/core';
+import { Card, SegmentedControl, useMantineTheme } from '@mantine/core';
 import { formatTempData } from '../../../utils/formatTempData';
 import { getTempHistory } from '../../../utils/getTempHistory';
 import { getMinOrMaxTemp } from '../../../utils/getMinOrMaxTemp';
@@ -71,11 +70,12 @@ export const TempGraph = () => {
 
   const [lineData, setLineData] = useState<ChartData<'line'>>({ labels: [], datasets: [] });
   const [lineOptions, setLineOptions] = useState<ChartOptions<'line'>>(config);
+  const [graphTimeframe, setGraphTimeframe] = useState('all');
 
   useEffect(() => {
     getTempHistory().then((res) => {
       const data = formatTempData(res.data);
-      setLineData(data);
+      setLineData(data[graphTimeframe]);
       const minTemp = getMinOrMaxTemp('min', res.data);
       const maxTemp = getMinOrMaxTemp('max', res.data);
       setLineOptions({
@@ -108,10 +108,18 @@ export const TempGraph = () => {
       });
     });
     //eslint-disable-next-line
-  }, []);
+  }, [graphTimeframe]);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <SegmentedControl
+        value={graphTimeframe}
+        onChange={setGraphTimeframe}
+        data={[
+          { label: 'All', value: 'all' },
+          { label: '24 Hrs', value: 'day' },
+        ]}
+      />
       <Line data={lineData} options={lineOptions} />
     </Card>
   );

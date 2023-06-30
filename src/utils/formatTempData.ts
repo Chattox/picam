@@ -1,12 +1,13 @@
 import { ChartData } from 'chart.js';
 import { formatTime } from './formatTime';
+import { filterDataByTime } from './filterDataByTime';
 
-interface TempDataProps {
+export interface TempDataProps {
   temp: number;
   time: string;
 }
 
-export const formatTempData = (data: TempDataProps[]): ChartData<'line'> => {
+const createLabelsAndDatasets = (data: TempDataProps[]) => {
   const labels = data.map((item) => {
     const time = formatTime(new Date(item.time));
     return time;
@@ -27,4 +28,15 @@ export const formatTempData = (data: TempDataProps[]): ChartData<'line'> => {
   ];
 
   return { labels, datasets };
+};
+
+export const formatTempData = (data: TempDataProps[]): Record<string, ChartData<'line'>> => {
+  const filteredData = filterDataByTime(data);
+
+  return {
+    all: createLabelsAndDatasets(filteredData.all),
+    day: createLabelsAndDatasets(filteredData.day),
+    week: createLabelsAndDatasets(filteredData.week),
+    month: createLabelsAndDatasets(filteredData.month),
+  };
 };

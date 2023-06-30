@@ -1,14 +1,12 @@
 import 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
-import { Chart } from 'chart.js/auto';
+import { Chart, ChartData, ChartOptions } from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { useEffect, useState } from 'react';
-import { ChartData, ChartOptions } from 'chart.js/auto';
-import { Card, useMantineTheme } from '@mantine/core';
+import { Card, SegmentedControl, useMantineTheme } from '@mantine/core';
 import { formatTempData } from '../../../utils/formatTempData';
 import { getTempHistory } from '../../../utils/getTempHistory';
 import { getMinOrMaxTemp } from '../../../utils/getMinOrMaxTemp';
-import { formatTime } from '../../../utils/formatTime';
 
 export const TempGraph = () => {
   const theme = useMantineTheme();
@@ -71,13 +69,14 @@ export const TempGraph = () => {
 
   const [lineData, setLineData] = useState<ChartData<'line'>>({ labels: [], datasets: [] });
   const [lineOptions, setLineOptions] = useState<ChartOptions<'line'>>(config);
+  const [graphTimeframe, setGraphTimeframe] = useState('day');
 
   useEffect(() => {
     getTempHistory().then((res) => {
       const data = formatTempData(res.data);
-      setLineData(data);
-      const minTemp = getMinOrMaxTemp('min', res.data);
-      const maxTemp = getMinOrMaxTemp('max', res.data);
+      setLineData(data[graphTimeframe]);
+      const minTemp = getMinOrMaxTemp('min', data[graphTimeframe]);
+      const maxTemp = getMinOrMaxTemp('max', data[graphTimeframe]);
       setLineOptions({
         ...lineOptions,
         plugins: {
@@ -88,7 +87,7 @@ export const TempGraph = () => {
             annotations: {
               minTemp: {
                 type: 'point',
-                xValue: formatTime(new Date(minTemp.time)),
+                xValue: minTemp.time,
                 yValue: parseFloat(minTemp.temp.toFixed(2)),
                 backgroundColor: theme.fn.rgba(theme.colors.cyan[3], 1),
                 radius: 4,
@@ -96,7 +95,7 @@ export const TempGraph = () => {
               },
               maxTemp: {
                 type: 'point',
-                xValue: formatTime(new Date(maxTemp.time)),
+                xValue: maxTemp.time,
                 yValue: parseFloat(maxTemp.temp.toFixed(2)),
                 backgroundColor: theme.fn.rgba(theme.colors.orange[5], 1),
                 radius: 4,
@@ -108,10 +107,20 @@ export const TempGraph = () => {
       });
     });
     //eslint-disable-next-line
-  }, []);
+  }, [graphTimeframe, lineData]);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
+      <SegmentedControl
+        value={graphTimeframe}
+        onChange={setGraphTimeframe}
+        data={[
+          { label: 'Day', value: 'day' },
+          { label: 'Week', value: 'week' },
+          { label: 'Month', value: 'month' },
+          { label: 'All', value: 'all' },
+        ]}
+      />
       <Line data={lineData} options={lineOptions} />
     </Card>
   );

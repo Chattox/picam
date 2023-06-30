@@ -69,7 +69,7 @@ export const TempGraph = () => {
 
   const [lineData, setLineData] = useState<ChartData<'line'>>({ labels: [], datasets: [] });
   const [lineOptions, setLineOptions] = useState<ChartOptions<'line'>>(config);
-  const [graphTimeframe, setGraphTimeframe] = useState('all');
+  const [graphTimeframe, setGraphTimeframe] = useState('day');
 
   useEffect(() => {
     getTempHistory().then((res) => {
@@ -115,8 +115,10 @@ export const TempGraph = () => {
         value={graphTimeframe}
         onChange={setGraphTimeframe}
         data={[
+          { label: 'Day', value: 'day' },
+          { label: 'Week', value: 'week' },
+          { label: 'Month', value: 'month' },
           { label: 'All', value: 'all' },
-          { label: '24 Hrs', value: 'day' },
         ]}
       />
       <Line data={lineData} options={lineOptions} />

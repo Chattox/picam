@@ -42,6 +42,9 @@ export const TempGraph = () => {
       },
     },
     plugins: {
+      legend: {
+        labels: { boxWidth: 5, boxHeight: 5, padding: 20 },
+      },
       annotation: {
         annotations: {
           minTemp: {
@@ -107,7 +110,7 @@ export const TempGraph = () => {
       });
     });
     //eslint-disable-next-line
-  }, [graphTimeframe, lineData]);
+  }, [graphTimeframe]);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>

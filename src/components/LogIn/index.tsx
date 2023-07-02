@@ -1,8 +1,9 @@
 import { Button, Group, PasswordInput } from '@mantine/core';
 import { useStyles } from './index.styles';
 import { useForm } from '@mantine/form';
+import { LoggedInToken } from '../../pages/Main';
 
-export const LogIn = (props: { setIsAuth: React.Dispatch<boolean> }) => {
+export const LogIn = (props: { setLoggedIn: React.Dispatch<LoggedInToken> }) => {
   const { classes } = useStyles();
   const loginForm = useForm({
     initialValues: {
@@ -18,7 +19,9 @@ export const LogIn = (props: { setIsAuth: React.Dispatch<boolean> }) => {
     <form
       onSubmit={loginForm.onSubmit(
         (values) => {
-          props.setIsAuth(true);
+          const loggedIn: LoggedInToken = { time: new Date().toISOString() };
+          props.setLoggedIn(loggedIn);
+          localStorage.setItem('loggedIn', JSON.stringify(loggedIn));
         },
         (validatorErrors) => {
           console.log(validatorErrors);

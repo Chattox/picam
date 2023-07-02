@@ -15,7 +15,7 @@ export const Main = () => {
     const loggedInItem = localStorage.getItem('loggedIn');
     if (loggedInItem) {
       const loggedInJSON = JSON.parse(loggedInItem);
-      if (loggedInJSON !== loggedIn) {
+      if (loggedInJSON.time !== loggedIn.time) {
         setLoggedIn(loggedInJSON);
       }
     }

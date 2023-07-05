@@ -39,6 +39,8 @@ export const TempGraph = () => {
         radius: 1,
         borderColor: theme.fn.rgba(theme.colors.blue[7], 1),
         backgroundColor: theme.fn.rgba(theme.colors.blue[7], 1),
+        hitRadius: 20,
+        hoverRadius: 8,
       },
     },
     plugins: {

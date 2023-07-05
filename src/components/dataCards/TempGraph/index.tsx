@@ -3,9 +3,10 @@ import { Line } from 'react-chartjs-2';
 import { Chart, ChartData, ChartOptions } from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { useEffect, useState } from 'react';
-import { Card, SegmentedControl, useMantineTheme } from '@mantine/core';
+import { ActionIcon, Card, Group, SegmentedControl, useMantineTheme } from '@mantine/core';
 import { TempDataProps, formatTempData } from '../../../utils/formatTempData';
 import { getTempHistory } from '../../../utils/getTempHistory';
+import { IconRefresh } from '@tabler/icons-react';
 
 export interface MinMaxTempProps {
   min: TempDataProps;
@@ -181,16 +182,21 @@ export const TempGraph = () => {
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <SegmentedControl
-        value={graphTimeframe}
-        onChange={setGraphTimeframe}
-        data={[
-          { label: 'Day', value: 'day' },
-          { label: 'Week', value: 'week' },
-          { label: 'Month', value: 'month' },
-          { label: 'All', value: 'all' },
-        ]}
-      />
+      <Group position="apart">
+        <SegmentedControl
+          value={graphTimeframe}
+          onChange={setGraphTimeframe}
+          data={[
+            { label: 'Day', value: 'day' },
+            { label: 'Week', value: 'week' },
+            { label: 'Month', value: 'month' },
+            { label: 'All', value: 'all' },
+          ]}
+        />
+        <ActionIcon color="cyan" size="lg" variant="outline" onClick={() => setIsloading(true)}>
+          <IconRefresh />
+        </ActionIcon>
+      </Group>
       {isLoading ? null : <Line data={lineData[graphTimeframe].data} options={lineOptions} />}
     </Card>
   );

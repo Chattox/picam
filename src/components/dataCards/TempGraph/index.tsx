@@ -3,10 +3,19 @@ import { Line } from 'react-chartjs-2';
 import { Chart, ChartData, ChartOptions } from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { useEffect, useState } from 'react';
-import { ActionIcon, Card, Group, SegmentedControl, useMantineTheme } from '@mantine/core';
+import {
+  ActionIcon,
+  Card,
+  Center,
+  Group,
+  Loader,
+  SegmentedControl,
+  useMantineTheme,
+} from '@mantine/core';
 import { TempDataProps, formatTempData } from '../../../utils/formatTempData';
 import { getTempHistory } from '../../../utils/getTempHistory';
 import { IconRefresh } from '@tabler/icons-react';
+import { useStyles } from './index.styles';
 
 export interface MinMaxTempProps {
   min: TempDataProps;
@@ -107,6 +116,7 @@ export const TempGraph = () => {
   const [lineOptions, setLineOptions] = useState<ChartOptions<'line'>>(config);
   const [graphTimeframe, setGraphTimeframe] = useState('day');
   const [isLoading, setIsloading] = useState(true);
+  const { classes } = useStyles();
 
   const refreshChart = () => {
     getTempHistory().then((res) => {
@@ -197,7 +207,13 @@ export const TempGraph = () => {
           <IconRefresh />
         </ActionIcon>
       </Group>
-      {isLoading ? null : <Line data={lineData[graphTimeframe].data} options={lineOptions} />}
+      {isLoading ? (
+        <Center className={classes.graph}>
+          <Loader color="cyan" />
+        </Center>
+      ) : (
+        <Line data={lineData[graphTimeframe].data} options={lineOptions} />
+      )}
     </Card>
   );
 };

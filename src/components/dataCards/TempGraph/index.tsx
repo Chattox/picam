@@ -3,10 +3,24 @@ import { Line } from 'react-chartjs-2';
 import { Chart, ChartData, ChartOptions } from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { useEffect, useState } from 'react';
-import { Card, SegmentedControl, useMantineTheme } from '@mantine/core';
-import { formatTempData } from '../../../utils/formatTempData';
+import {
+  ActionIcon,
+  Card,
+  Center,
+  Group,
+  Loader,
+  SegmentedControl,
+  useMantineTheme,
+} from '@mantine/core';
+import { TempDataProps, formatTempData } from '../../../utils/formatTempData';
 import { getTempHistory } from '../../../utils/getTempHistory';
-import { getMinOrMaxTemp } from '../../../utils/getMinOrMaxTemp';
+import { IconRefresh } from '@tabler/icons-react';
+import { useStyles } from './index.styles';
+
+export interface MinMaxTempProps {
+  min: TempDataProps;
+  max: TempDataProps;
+}
 
 export const TempGraph = () => {
   const theme = useMantineTheme();
@@ -72,16 +86,41 @@ export const TempGraph = () => {
     },
   };
 
-  const [lineData, setLineData] = useState<ChartData<'line'>>({ labels: [], datasets: [] });
+  interface LineDataProps {
+    [key: 'all' | 'day' | 'week' | 'month' | string]: {
+      data: ChartData<'line'>;
+      minMax: MinMaxTempProps;
+    };
+  }
+
+  const placeholderData = {
+    all: {
+      data: { labels: [], datasets: [] },
+      minMax: { min: { temp: 0, time: '' }, max: { temp: 999, time: '' } },
+    },
+    day: {
+      data: { labels: [], datasets: [] },
+      minMax: { min: { temp: 0, time: '' }, max: { temp: 999, time: '' } },
+    },
+    week: {
+      data: { labels: [], datasets: [] },
+      minMax: { min: { temp: 0, time: '' }, max: { temp: 999, time: '' } },
+    },
+    month: {
+      data: { labels: [], datasets: [] },
+      minMax: { min: { temp: 0, time: '' }, max: { temp: 999, time: '' } },
+    },
+  };
+
+  const [lineData, setLineData] = useState<LineDataProps>(placeholderData);
   const [lineOptions, setLineOptions] = useState<ChartOptions<'line'>>(config);
   const [graphTimeframe, setGraphTimeframe] = useState('day');
+  const [isLoading, setIsloading] = useState(true);
+  const { classes } = useStyles();
 
-  useEffect(() => {
+  const refreshChart = () => {
     getTempHistory().then((res) => {
-      const data = formatTempData(res.data);
-      setLineData(data[graphTimeframe]);
-      const minTemp = getMinOrMaxTemp('min', data[graphTimeframe]);
-      const maxTemp = getMinOrMaxTemp('max', data[graphTimeframe]);
+      setLineData(formatTempData(res.data));
       setLineOptions({
         ...lineOptions,
         plugins: {
@@ -92,16 +131,16 @@ export const TempGraph = () => {
             annotations: {
               minTemp: {
                 type: 'point',
-                xValue: minTemp.time,
-                yValue: parseFloat(minTemp.temp.toFixed(2)),
+                xValue: lineData[graphTimeframe].minMax.min.time,
+                yValue: parseFloat(lineData[graphTimeframe].minMax.min.temp.toFixed(2)),
                 backgroundColor: theme.fn.rgba(theme.colors.cyan[3], 1),
                 radius: 4,
                 borderWidth: 0,
               },
               maxTemp: {
                 type: 'point',
-                xValue: maxTemp.time,
-                yValue: parseFloat(maxTemp.temp.toFixed(2)),
+                xValue: lineData[graphTimeframe].minMax.max.time,
+                yValue: parseFloat(lineData[graphTimeframe].minMax.max.temp.toFixed(2)),
                 backgroundColor: theme.fn.rgba(theme.colors.orange[5], 1),
                 radius: 4,
                 borderWidth: 0,
@@ -110,23 +149,71 @@ export const TempGraph = () => {
           },
         },
       });
+      setIsloading(false);
     });
+  };
+
+  useEffect(() => {
+    refreshChart();
     //eslint-disable-next-line
+  }, [isLoading]);
+
+  useEffect(() => {
+    setLineOptions({
+      ...lineOptions,
+      plugins: {
+        legend: {
+          labels: { boxWidth: 5, boxHeight: 5, padding: 20 },
+        },
+        annotation: {
+          annotations: {
+            minTemp: {
+              type: 'point',
+              xValue: lineData[graphTimeframe].minMax.min.time,
+              yValue: parseFloat(lineData[graphTimeframe].minMax.min.temp.toFixed(2)),
+              backgroundColor: theme.fn.rgba(theme.colors.cyan[3], 1),
+              radius: 4,
+              borderWidth: 0,
+            },
+            maxTemp: {
+              type: 'point',
+              xValue: lineData[graphTimeframe].minMax.max.time,
+              yValue: parseFloat(lineData[graphTimeframe].minMax.max.temp.toFixed(2)),
+              backgroundColor: theme.fn.rgba(theme.colors.orange[5], 1),
+              radius: 4,
+              borderWidth: 0,
+            },
+          },
+        },
+      },
+    });
+    // eslint-disable-next-line
   }, [graphTimeframe]);
 
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <SegmentedControl
-        value={graphTimeframe}
-        onChange={setGraphTimeframe}
-        data={[
-          { label: 'Day', value: 'day' },
-          { label: 'Week', value: 'week' },
-          { label: 'Month', value: 'month' },
-          { label: 'All', value: 'all' },
-        ]}
-      />
-      <Line data={lineData} options={lineOptions} />
+      <Group position="apart">
+        <SegmentedControl
+          value={graphTimeframe}
+          onChange={setGraphTimeframe}
+          data={[
+            { label: 'Day', value: 'day' },
+            { label: 'Week', value: 'week' },
+            { label: 'Month', value: 'month' },
+            { label: 'All', value: 'all' },
+          ]}
+        />
+        <ActionIcon color="cyan" size="lg" variant="outline" onClick={() => setIsloading(true)}>
+          <IconRefresh />
+        </ActionIcon>
+      </Group>
+      {isLoading ? (
+        <Center className={classes.graph}>
+          <Loader color="cyan" />
+        </Center>
+      ) : (
+        <Line data={lineData[graphTimeframe].data} options={lineOptions} />
+      )}
     </Card>
   );
 };

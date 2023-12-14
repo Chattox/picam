@@ -1,12 +1,15 @@
-import { formatTime } from './formatTime';
-import { filterDataByTime } from './filterDataByTime';
-import { getMinMaxTemps } from './getMinMaxTemps';
-import { ChartData } from 'chart.js';
-import { MinMaxTempProps } from '../components/dataCards/TempGraph';
+import { formatTime } from "./formatTime";
+import { getMinMaxTemps } from "./getMinMaxTemps";
+import { ChartData } from "chart.js";
+import { MinMaxTempProps } from "../components/dataCards/TempGraph";
 
 export interface TempDataProps {
   temp: number;
   time: string;
+}
+
+export interface FormatTempDataProps {
+  [key: "day" | "week" | "month" | "all" | string]: TempDataProps[];
 }
 
 const createLabelsAndDatasets = (data: TempDataProps[]) => {
@@ -16,15 +19,15 @@ const createLabelsAndDatasets = (data: TempDataProps[]) => {
   });
   const datasets = [
     {
-      label: 'Temperature °C',
+      label: "Temperature °C",
       data: data.map((item) => parseFloat(item.temp.toFixed(2))),
     },
     {
-      label: 'Min Temp',
+      label: "Min Temp",
       data: [],
     },
     {
-      label: 'Max Temp',
+      label: "Max Temp",
       data: [],
     },
   ];
@@ -33,7 +36,7 @@ const createLabelsAndDatasets = (data: TempDataProps[]) => {
 };
 
 const getMinMaxTempsData = (
-  data: Record<string, ChartData<'line'>>
+  data: Record<string, ChartData<"line">>
 ): Record<string, MinMaxTempProps> => {
   return {
     all: getMinMaxTemps(data.all),
@@ -43,13 +46,12 @@ const getMinMaxTempsData = (
   };
 };
 
-export const formatTempData = (data: TempDataProps[]) => {
-  const filteredData = filterDataByTime(data);
+export const formatTempData = (data: FormatTempDataProps) => {
   const formattedData = {
-    all: createLabelsAndDatasets(filteredData.all),
-    day: createLabelsAndDatasets(filteredData.day),
-    week: createLabelsAndDatasets(filteredData.week),
-    month: createLabelsAndDatasets(filteredData.month),
+    all: createLabelsAndDatasets(data.all),
+    day: createLabelsAndDatasets(data.day),
+    week: createLabelsAndDatasets(data.week),
+    month: createLabelsAndDatasets(data.month),
   };
   const minMaxTempData = getMinMaxTempsData(formattedData);
 

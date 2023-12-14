@@ -1,8 +1,8 @@
-import 'chart.js/auto';
-import { Line } from 'react-chartjs-2';
-import { Chart, ChartData, ChartOptions } from 'chart.js/auto';
-import annotationPlugin from 'chartjs-plugin-annotation';
-import { useEffect, useState } from 'react';
+import "chart.js/auto";
+import { Line } from "react-chartjs-2";
+import { Chart, ChartData, ChartOptions } from "chart.js/auto";
+import annotationPlugin from "chartjs-plugin-annotation";
+import { useEffect, useState } from "react";
 import {
   ActionIcon,
   Card,
@@ -10,12 +10,13 @@ import {
   Group,
   Loader,
   SegmentedControl,
+  Text,
   useMantineTheme,
-} from '@mantine/core';
-import { TempDataProps, formatTempData } from '../../../utils/formatTempData';
-import { getTempHistory } from '../../../utils/getTempHistory';
-import { IconRefresh } from '@tabler/icons-react';
-import { useStyles } from './index.styles';
+} from "@mantine/core";
+import { TempDataProps, formatTempData } from "../../../utils/formatTempData";
+import { getTempHistory } from "../../../utils/getTempHistory";
+import { IconRefresh } from "@tabler/icons-react";
+import { useStyles } from "./index.styles";
 
 export interface MinMaxTempProps {
   min: TempDataProps;
@@ -26,7 +27,7 @@ export const TempGraph = () => {
   const theme = useMantineTheme();
   Chart.register(annotationPlugin);
 
-  const config: ChartOptions<'line'> = {
+  const config: ChartOptions<"line"> = {
     scales: {
       x: {
         ticks: {
@@ -35,7 +36,7 @@ export const TempGraph = () => {
         },
       },
       y: {
-        grace: '5%',
+        grace: "5%",
       },
     },
     elements: {
@@ -64,19 +65,19 @@ export const TempGraph = () => {
       annotation: {
         annotations: {
           minTemp: {
-            type: 'point',
+            type: "point",
             xValue: undefined,
             yValue: undefined,
-            backgroundColor: 'rgba(0, 255, 0, 0.5)',
+            backgroundColor: "rgba(0, 255, 0, 0.5)",
             radius: 3,
             borderWidth: 0,
             display: false,
           },
           maxTemp: {
-            type: 'point',
+            type: "point",
             xValue: undefined,
             yValue: undefined,
-            backgroundColor: 'rgba(255, 0, 0, 0.5)',
+            backgroundColor: "rgba(255, 0, 0, 0.5)",
             radius: 3,
             borderWidth: 0,
             display: false,
@@ -87,8 +88,8 @@ export const TempGraph = () => {
   };
 
   interface LineDataProps {
-    [key: 'all' | 'day' | 'week' | 'month' | string]: {
-      data: ChartData<'line'>;
+    [key: "all" | "day" | "week" | "month" | string]: {
+      data: ChartData<"line">;
       minMax: MinMaxTempProps;
     };
   }
@@ -96,25 +97,25 @@ export const TempGraph = () => {
   const placeholderData = {
     all: {
       data: { labels: [], datasets: [] },
-      minMax: { min: { temp: 0, time: '' }, max: { temp: 999, time: '' } },
+      minMax: { min: { temp: 0, time: "" }, max: { temp: 999, time: "" } },
     },
     day: {
       data: { labels: [], datasets: [] },
-      minMax: { min: { temp: 0, time: '' }, max: { temp: 999, time: '' } },
+      minMax: { min: { temp: 0, time: "" }, max: { temp: 999, time: "" } },
     },
     week: {
       data: { labels: [], datasets: [] },
-      minMax: { min: { temp: 0, time: '' }, max: { temp: 999, time: '' } },
+      minMax: { min: { temp: 0, time: "" }, max: { temp: 999, time: "" } },
     },
     month: {
       data: { labels: [], datasets: [] },
-      minMax: { min: { temp: 0, time: '' }, max: { temp: 999, time: '' } },
+      minMax: { min: { temp: 0, time: "" }, max: { temp: 999, time: "" } },
     },
   };
 
   const [lineData, setLineData] = useState<LineDataProps>(placeholderData);
-  const [lineOptions, setLineOptions] = useState<ChartOptions<'line'>>(config);
-  const [graphTimeframe, setGraphTimeframe] = useState('day');
+  const [lineOptions, setLineOptions] = useState<ChartOptions<"line">>(config);
+  const [graphTimeframe, setGraphTimeframe] = useState("day");
   const [isLoading, setIsloading] = useState(true);
   const { classes } = useStyles();
 
@@ -130,17 +131,21 @@ export const TempGraph = () => {
           annotation: {
             annotations: {
               minTemp: {
-                type: 'point',
+                type: "point",
                 xValue: lineData[graphTimeframe].minMax.min.time,
-                yValue: parseFloat(lineData[graphTimeframe].minMax.min.temp.toFixed(2)),
+                yValue: parseFloat(
+                  lineData[graphTimeframe].minMax.min.temp.toFixed(2)
+                ),
                 backgroundColor: theme.fn.rgba(theme.colors.cyan[3], 1),
                 radius: 4,
                 borderWidth: 0,
               },
               maxTemp: {
-                type: 'point',
+                type: "point",
                 xValue: lineData[graphTimeframe].minMax.max.time,
-                yValue: parseFloat(lineData[graphTimeframe].minMax.max.temp.toFixed(2)),
+                yValue: parseFloat(
+                  lineData[graphTimeframe].minMax.max.temp.toFixed(2)
+                ),
                 backgroundColor: theme.fn.rgba(theme.colors.orange[5], 1),
                 radius: 4,
                 borderWidth: 0,
@@ -168,17 +173,21 @@ export const TempGraph = () => {
         annotation: {
           annotations: {
             minTemp: {
-              type: 'point',
+              type: "point",
               xValue: lineData[graphTimeframe].minMax.min.time,
-              yValue: parseFloat(lineData[graphTimeframe].minMax.min.temp.toFixed(2)),
+              yValue: parseFloat(
+                lineData[graphTimeframe].minMax.min.temp.toFixed(2)
+              ),
               backgroundColor: theme.fn.rgba(theme.colors.cyan[3], 1),
               radius: 4,
               borderWidth: 0,
             },
             maxTemp: {
-              type: 'point',
+              type: "point",
               xValue: lineData[graphTimeframe].minMax.max.time,
-              yValue: parseFloat(lineData[graphTimeframe].minMax.max.temp.toFixed(2)),
+              yValue: parseFloat(
+                lineData[graphTimeframe].minMax.max.temp.toFixed(2)
+              ),
               backgroundColor: theme.fn.rgba(theme.colors.orange[5], 1),
               radius: 4,
               borderWidth: 0,
@@ -197,13 +206,18 @@ export const TempGraph = () => {
           value={graphTimeframe}
           onChange={setGraphTimeframe}
           data={[
-            { label: 'Day', value: 'day' },
-            { label: 'Week', value: 'week' },
-            { label: 'Month', value: 'month' },
-            { label: 'All', value: 'all' },
+            { label: "Day", value: "day" },
+            { label: "Week", value: "week" },
+            { label: "Month", value: "month" },
+            { label: "All", value: "all" },
           ]}
         />
-        <ActionIcon color="cyan" size="lg" variant="outline" onClick={() => setIsloading(true)}>
+        <ActionIcon
+          color="cyan"
+          size="lg"
+          variant="outline"
+          onClick={() => setIsloading(true)}
+        >
           <IconRefresh />
         </ActionIcon>
       </Group>
@@ -212,7 +226,14 @@ export const TempGraph = () => {
           <Loader color="cyan" />
         </Center>
       ) : (
-        <Line data={lineData[graphTimeframe].data} options={lineOptions} />
+        <>
+          <Line data={lineData[graphTimeframe].data} options={lineOptions} />
+          {graphTimeframe !== "day" ? (
+            <Text fz="xs" c="dimmed">
+              Average temperatures over time
+            </Text>
+          ) : null}
+        </>
       )}
     </Card>
   );
